@@ -18,6 +18,7 @@ import ServiceLogForm from './components/service/ServiceLogForm';
 const DeviceCRMDashboard = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [darkMode, setDarkMode] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [devices, setDevices] = useState(mockDevices || []);
   const [showDeviceForm, setShowDeviceForm] = useState(false);
   const [showInstallationForm, setShowInstallationForm] = useState(false);
@@ -260,12 +261,12 @@ const DeviceCRMDashboard = () => {
 
   return (
     <div className={`flex h-screen ${darkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
-      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} darkMode={darkMode} />
+      <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} darkMode={darkMode} isOpen={sidebarOpen} setIsOpen={setSidebarOpen}/>
 
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <Header darkMode={darkMode} setDarkMode={setDarkMode} />
+      <div className="flex-1 flex flex-col overflow-hidden lg:ml-0">
+        <Header darkMode={darkMode} setDarkMode={setDarkMode} onMenuClick={()=>setSidebarOpen(true)}/>
 
-        <main className="flex-1 overflow-x-hidden overflow-y-auto p-6">
+        <main className="flex-1 overflow-x-hidden overflow-y-auto p-4 sm:p-6">
           {renderContent()}
         </main>
       </div>
