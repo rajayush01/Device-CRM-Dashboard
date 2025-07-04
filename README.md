@@ -36,7 +36,7 @@
 
 **Clone:** 
 
-https://github.com/yourusername/device-crm-dashboard.git
+[https://github.com/rajayush01/device-crm-dashboard.git](https://github.com/rajayush01/Device-CRM-Dashboard)
 
 cd device-crm-dashboard
 
