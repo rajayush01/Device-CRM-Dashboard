@@ -103,27 +103,58 @@ const AlertsAndPhotos = ({ darkMode }) => {
         </div>
         <div className="p-6 space-y-4">
           {alerts.map(alert => (
-            <div key={alert.id} className={`p-4 rounded-lg border-l-4 ${alert.severity === 'High' ? 'border-red-500 bg-red-50' :
-              alert.severity === 'Medium' ? 'border-yellow-500 bg-yellow-50' :
-                'border-green-500 bg-green-50'
-              }`}>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <AlertTriangle className={`w-5 h-5 ${alert.severity === 'High' ? 'text-red-500' :
-                    alert.severity === 'Medium' ? 'text-yellow-500' :
-                      'text-green-500'
-                    }`} />
+            <div
+              key={alert.id}
+              className={`p-4 rounded-lg border-l-4 ${
+                alert.severity === 'High'
+                  ? 'border-red-500 bg-red-50'
+                  : alert.severity === 'Medium'
+                  ? 'border-yellow-500 bg-yellow-50'
+                  : 'border-green-500 bg-green-50'
+              }`}
+            >
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div className="flex items-start sm:items-center space-x-3">
+                  <AlertTriangle
+                    className={`w-5 h-5 ${
+                      alert.severity === 'High'
+                        ? 'text-red-500'
+                        : alert.severity === 'Medium'
+                        ? 'text-yellow-500'
+                        : 'text-green-500'
+                    }`}
+                  />
                   <div>
-                    <div className="font-medium text-gray-900">{alert.deviceId} - {alert.type}</div>
+                    <div className="font-medium text-gray-900 break-words">
+                      {alert.deviceId} - {alert.type}
+                    </div>
                     <div className="text-sm text-gray-600">{alert.message}</div>
                     <div className="text-xs text-gray-500">{alert.timestamp}</div>
                   </div>
                 </div>
-                <div className="flex items-center space-x-2">
-                  <span className={`px-2 py-1 rounded-full text-xs font-medium ${getSeverityColor(alert.severity)}`}>{alert.severity}</span>
+                <div className="flex flex-wrap items-center gap-2 justify-end sm:justify-start">
+                  <span
+                    className={`px-2 py-1 rounded-full text-xs font-medium ${getSeverityColor(
+                      alert.severity
+                    )}`}
+                  >
+                    {alert.severity}
+                  </span>
                   <StatusBadge status={alert.status} />
-                  {alert.status === 'Active' && <button onClick={() => handleAcknowledge(alert.id)} className="text-sm text-blue-600 hover:underline">Acknowledge</button>}
-                  <button onClick={() => handleDeleteAlert(alert.id)} className="text-sm text-red-600 hover:underline">Delete</button>
+                  {alert.status === 'Active' && (
+                    <button
+                      onClick={() => handleAcknowledge(alert.id)}
+                      className="text-sm text-blue-600 hover:underline"
+                    >
+                      Acknowledge
+                    </button>
+                  )}
+                  <button
+                    onClick={() => handleDeleteAlert(alert.id)}
+                    className="text-sm text-red-600 hover:underline"
+                  >
+                    Delete
+                  </button>
                 </div>
               </div>
             </div>
@@ -133,14 +164,19 @@ const AlertsAndPhotos = ({ darkMode }) => {
 
       {/* Photos */}
       <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-sm`}>
-        <div className="px-6 py-4 border-b border-gray-200 flex items-center justify-between">
-          <h3 className={`text-lg font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>Photo Documentation</h3>
-          <button onClick={handleUploadClick} className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700">
+        <div className="px-6 py-4 border-b border-gray-200 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <h3 className={`text-lg font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>
+            Photo Documentation
+          </h3>
+          <button
+            onClick={handleUploadClick}
+            className="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700"
+          >
             <Camera className="w-4 h-4 mr-2 inline" /> Upload Photo
           </button>
           <input type="file" ref={fileInputRef} onChange={handlePhotoUpload} className="hidden" />
         </div>
-        <div className="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {photos.map(photo => (
             <div key={photo.id} className={`border rounded-lg p-4 ${darkMode ? 'border-gray-600' : 'border-gray-200'}`}>
               <div className="flex items-center space-x-3 mb-3">
@@ -157,30 +193,29 @@ const AlertsAndPhotos = ({ darkMode }) => {
                 <div>Date: {photo.uploadDate}</div>
                 <div>By: {photo.uploadedBy}</div>
               </div>
-              <div className="mt-3 flex space-x-2">
-  <a
-    href={photo.fileUrl}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="flex-1 inline-flex items-center justify-center bg-blue-600 text-white px-3 py-2 rounded text-sm font-medium hover:bg-blue-700 transition"
-  >
-    <Eye className="w-4 h-4 mr-1" /> View
-  </a>
-  <a
-    href={photo.fileUrl}
-    download={photo.filename}
-    className="flex-1 inline-flex items-center justify-center bg-gray-600 text-white px-3 py-2 rounded text-sm font-medium hover:bg-gray-700 transition"
-  >
-    <Download className="w-4 h-4 mr-1" /> Download
-  </a>
-  <button
-    onClick={() => handleDeletePhoto(photo.id)}
-    className="flex-1 inline-flex items-center justify-center bg-red-600 text-white px-3 py-2 rounded text-sm font-medium hover:bg-red-700 transition"
-  >
-    <Trash2 className="w-4 h-4 mr-1" /> Delete
-  </button>
-</div>
-
+              <div className="mt-3 flex flex-col md:flex-row gap-2">
+                <a
+                  href={photo.fileUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-1 inline-flex items-center justify-center bg-blue-600 text-white px-3 py-2 rounded text-sm font-medium hover:bg-blue-700 transition"
+                >
+                  <Eye className="w-4 h-4 mr-1" /> View
+                </a>
+                <a
+                  href={photo.fileUrl}
+                  download={photo.filename}
+                  className="flex-1 inline-flex items-center justify-center bg-gray-600 text-white px-3 py-2 rounded text-sm font-medium hover:bg-gray-700 transition"
+                >
+                  <Download className="w-4 h-4 mr-1" /> Download
+                </a>
+                <button
+                  onClick={() => handleDeletePhoto(photo.id)}
+                  className="flex-1 inline-flex items-center justify-center bg-red-600 text-white px-3 py-2 rounded text-sm font-medium hover:bg-red-700 transition"
+                >
+                  <Trash2 className="w-4 h-4 mr-1" /> Delete
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -188,9 +223,12 @@ const AlertsAndPhotos = ({ darkMode }) => {
 
       {/* QR Code Scanner */}
       <div className={`${darkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-sm p-6`}>
-        <div className="flex items-center justify-between mb-4">
+        <div className="flex flex-col sm:flex-row justify-between gap-4 sm:items-center mb-4">
           <h3 className={`text-lg font-semibold ${darkMode ? 'text-white' : 'text-gray-900'}`}>QR Code Scanner</h3>
-          <button onClick={() => setShowQRScanner(!showQRScanner)} className="bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700">
+          <button
+            onClick={() => setShowQRScanner(!showQRScanner)}
+            className="w-full sm:w-auto bg-green-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-700"
+          >
             <QrCode className="w-4 h-4 mr-2 inline" /> Scan Device
           </button>
         </div>
